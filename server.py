@@ -5,7 +5,7 @@ import time
 
 # SETTING UP CONSTANTS
 # HardCode IP (or check network adapter settings) if there is problem fetching IP
-# Change PORT if not available
+# Change PORT if 9999 not available
 SERVER = socket.gethostbyname(socket.gethostname())
 PORT = 9999
 ADDR = (SERVER, PORT)
@@ -17,6 +17,8 @@ CANCELLABLE = True
 DISCONNECT = '  '
 
 # DATA RECEIVER
+# First receives number of bytes to receive
+# Then runs loop until all bytes are received
 def receiveData(client):
     global SEND
     global PREVIOUS
@@ -45,6 +47,8 @@ def receiveData(client):
 
 
 # DATA SENDER
+# First sends number of bytes being sent
+# Then runs loop until all data is sent
 def send(msg):
     message = msg.encode(FORMAT)
     msg_length = len(message)
@@ -81,7 +85,7 @@ print('[CONNECTED] Connected to', addr)
 thread = threading.Thread(target=receiveData, args=(conn,))
 thread.start()
 
-# SENDING DATA
+# SEND DATA WHEN CLIPBOARD TEXT CHANGES
 while True:
     CANCELLABLE = True
     pyperclip.waitForNewPaste()
